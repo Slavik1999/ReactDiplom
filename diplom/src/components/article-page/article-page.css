@@ -1,0 +1,41 @@
+.articleHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 180px;
+  background-color: rgb(49, 47, 47);
+}
+.articleUserInfoBody {
+  border-top: 1px solid rgb(250, 219, 219);
+  margin-top: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+}
+.articleName {
+  margin-bottom: 20px;
+  color: white;
+}
+.articleName h1 {
+  font-size: 45px;
+}
+.articleBody {
+  margin-top: 25px;
+}
+.userNameDate .name {
+  color: #16d86d;
+}
+.userNameDate .name:hover {
+  color: #16d86d;
+}
+.userNameDate {
+  margin-right: 25px;
+}
+.articleBodyText {
+  font-weight: 350;
+  font-size: 20px;
+}
+.articleBody .footer {
+  margin-top: 20px;
+}

@@ -1,0 +1,34 @@
+.header .likeFavorite {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45px;
+  height: 30px;
+  border: 1px solid #22dd76;
+  border-radius: 5px;
+  color: white;
+  font-size: 13px;
+  background-color: #22dd76;
+}
+.header .likeFavorite:hover {
+  cursor: pointer;
+  background-color: rgb(29, 185, 99);
+}
+.header .like {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45px;
+  height: 30px;
+  border: 1px solid #16b85f;
+  border-radius: 5px;
+  color: #16b85f;
+  font-size: 13px;
+  background-color: white;
+}
+.header .like:hover {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+  background-color: #16b85f;
+}

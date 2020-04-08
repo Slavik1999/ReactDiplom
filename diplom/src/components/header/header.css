@@ -1,0 +1,19 @@
+.cont {
+  width: 100%;
+}
+.headerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 170px;
+  background-color: #16b85f;
+  color: white;
+}
+h1 {
+  font-size: 55px;
+}
+span {
+  font-weight: 200;
+  font-size: 25px;
+}

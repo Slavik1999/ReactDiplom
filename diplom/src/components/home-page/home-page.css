@@ -1,0 +1,39 @@
+.container.body {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 45px;
+}
+.container.body .linkBody {
+  margin-right: 5px;
+  padding: 10px;
+  border-bottom: 2px solid #08d319;
+  color: rgb(161, 148, 148);
+}
+.container.body .linkBody:hover {
+  text-decoration: none;
+  color: black;
+}
+
+.activeLink {
+  font-size: 15px;
+  margin-right: 5px;
+  padding: 10px;
+  border-bottom: 2px solid #08d319;
+  color: #08d319;
+}
+.activeLink:hover {
+  text-decoration: none;
+  cursor: pointer;
+  color: black;
+}
+.link {
+  font-size: 15px;
+  margin-right: 5px;
+  padding: 10px;
+  color: rgb(161, 148, 148);
+}
+.link:hover {
+  text-decoration: none;
+  cursor: pointer;
+  color: black;
+}

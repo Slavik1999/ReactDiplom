@@ -1,0 +1,26 @@
+.linkForm {
+  border: 0px;
+  color: #11e06e;
+}
+
+.linkForm:hover {
+  color: #1c6e5a;
+  text-decoration: none;
+}
+.btn {
+  border: 0px;
+  background-color: #11e06e;
+}
+
+.btn:hover {
+  background-color: #15b45c;
+}
+.form.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 400px;
+}
+.form {
+  width: 400px;
+}

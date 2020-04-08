@@ -1,0 +1,65 @@
+.cont {
+  width: 100%;
+}
+.profileHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+  background-color: rgb(255, 234, 234);
+}
+.profileAvatar {
+  text-align: center;
+}
+.profile.fa.fa-smile-o {
+  font-size: 120px;
+  color: rgb(155, 132, 132);
+}
+.profileName {
+  font-weight: 600;
+  font-size: 30px;
+  color: black;
+}
+.container.linkProfiles {
+  margin-top: 35px;
+}
+.linkProfile {
+  color: rgb(161, 148, 148);
+  margin-right: 5px;
+  padding: 10px;
+  border-bottom: 2px solid #08d319;
+}
+.linkProfile:hover {
+  cursor: pointer;
+}
+.container.buttonFollow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.profileFollow {
+  background-color: inherit;
+  text-align: center;
+  padding: 0px 5px 2px 5px;
+  border: 1px solid rgb(155, 132, 132);
+  border-radius: 3px;
+  color: rgb(155, 132, 132);
+}
+.profileFollow:hover {
+  text-decoration: none;
+  color: rgb(155, 132, 132);
+  background-color: rgb(226, 185, 185);
+}
+.profileAvatar .avatar {
+  border-radius: 100px;
+  width: 120px;
+  height: 120px;
+}
+.noArticles {
+  margin-top: 20px;
+}
+.bio {
+  font-size: 15px;
+  color: rgb(196, 162, 162);
+}

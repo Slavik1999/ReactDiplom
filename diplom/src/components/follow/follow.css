@@ -1,0 +1,30 @@
+.articleFollow {
+  font-size: 16px;
+  background-color: inherit;
+  text-align: center;
+  padding: 0px 5px 2px 5px;
+  border: 1px solid rgb(155, 132, 132);
+  border-radius: 3px;
+  color: rgb(155, 132, 132);
+}
+.articleFollow:hover {
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+  background-color: rgb(226, 185, 185);
+}
+.articleUnfollow {
+  font-size: 16px;
+  background-color: rgb(252, 203, 203);
+  text-align: center;
+  padding: 0px 5px 2px 5px;
+  border: 1px solid rgb(155, 132, 132);
+  border-radius: 3px;
+  color: black;
+}
+.articleUnfollow:hover {
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+  background-color: white;
+}

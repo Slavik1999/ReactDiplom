@@ -1,0 +1,12 @@
+.btnLogout {
+  background-color: white;
+  color: rgb(184, 59, 59);
+  padding: 8px;
+  border: 1px solid rgb(184, 59, 59);
+  border-radius: 5px;
+  margin-top: 20px;
+}
+.btnLogout:hover {
+  background-color: rgb(184, 59, 59);
+  color: white;
+}
