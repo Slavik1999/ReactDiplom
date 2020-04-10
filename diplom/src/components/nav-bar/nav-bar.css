@@ -11,6 +11,7 @@
 }
 .header h2 a:hover {
   color: #11e06e;
+  text-decoration: none;
 }
 .avatar {
   width: 30px;

@@ -3,13 +3,17 @@ import { Link, withRouter, NavLink } from "react-router-dom";
 
 import "./nav-bar.css";
 
-const Header = ({ loggedIn, user }) => {
+const NavBar = ({ loggedIn, user }) => {
+  const logo = (
+    <h2>
+      <Link to="/">slavyanin</Link>
+    </h2>
+  );
+
   if (loggedIn) {
     return (
       <div className="container header d-flex">
-        <h2>
-          <Link to="/">slavyanin</Link>
-        </h2>
+        {logo}
         <div className="d-flex">
           <NavLink
             to="/"
@@ -51,9 +55,7 @@ const Header = ({ loggedIn, user }) => {
   if (!loggedIn) {
     return (
       <div className="container header d-flex">
-        <h2>
-          <Link to="/">slavyanin</Link>
-        </h2>
+        {logo}
         <ul className="d-flex">
           <NavLink
             to="/"
@@ -85,4 +87,4 @@ const Header = ({ loggedIn, user }) => {
   }
 };
 
-export default withRouter(Header);
+export default withRouter(NavBar);

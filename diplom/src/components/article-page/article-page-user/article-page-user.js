@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import Like from "../../article-page-like";
+import Like from "../../like";
 import Follow from "../../follow";
 
 import "./article-page-user.css";
@@ -22,25 +22,6 @@ const ArticlePageUser = ({
   const [followLink, setFollowLink] = useState("");
 
   useEffect(() => {
-    setLikeLink(
-      <Like
-        loggedIn={loggedIn}
-        favorited={favorited}
-        favoritesCount={favoritesCount}
-        article={article}
-        GetLike={like}
-      />
-    );
-
-    setFollowLink(
-      <Follow
-        loggedIn={loggedIn}
-        following={following}
-        username={author.username}
-        GetFollowing={follow}
-      />
-    );
-
     if (author.username === username) {
       setFollowLink(
         <Link className="editArticle" to={`/editor/${article.slug}`}>
@@ -51,6 +32,25 @@ const ArticlePageUser = ({
         <span className="deleteArticle" onClick={() => deleteArticle()}>
           Delete Article
         </span>
+      );
+    } else {
+      setLikeLink(
+        <Like
+          loggedIn={loggedIn}
+          favorited={favorited}
+          favoritesCount={favoritesCount}
+          article={article}
+          GetLike={like}
+          articlePage={true}
+        />
+      );
+      setFollowLink(
+        <Follow
+          loggedIn={loggedIn}
+          following={following}
+          username={author.username}
+          GetFollowing={follow}
+        />
       );
     }
   }, [
@@ -66,6 +66,19 @@ const ArticlePageUser = ({
     deleteArticle,
   ]);
 
+  function formatDate(date) {
+    var dd = date.getDate();
+    if (dd < 10) dd = "0" + dd;
+
+    var mm = date.getMonth() + 1;
+    if (mm < 10) mm = "0" + mm;
+
+    var yy = date.getFullYear() % 100;
+    if (yy < 10) yy = "0" + yy;
+
+    return dd + "." + mm + "." + yy;
+  }
+
   return (
     <div className="articleInfo ">
       <div className="articleUserInfo">
@@ -75,7 +88,7 @@ const ArticlePageUser = ({
         <Link className="name" to={`/profile/${author.username}`}>
           {author.username}
         </Link>
-        <div className="date">{article.updatedAt}</div>
+        <div className="date">{formatDate(new Date(article.updatedAt))}</div>
       </div>
       <div className="articleButtons">
         {followLink}

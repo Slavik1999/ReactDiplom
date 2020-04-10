@@ -8,18 +8,14 @@ import Authorisation from "../../services/authorisation";
 import "./authorization-form.css";
 
 const AuthorizationForm = ({ changeUser }) => {
+  const authorisation = useMemo(() => new Authorisation(), []);
+
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
   const [errors, setErrors] = useState([]);
 
   const [redirect, setRedirect] = useState(false);
-
-  const authorisation = useMemo(() => new Authorisation(), []);
-
-  const user = {
-    user: { email, password },
-  };
 
   const setPasswords = (e) => {
     setPassword(e.target.value);
@@ -29,28 +25,23 @@ const AuthorizationForm = ({ changeUser }) => {
     setEmail(e.target.value);
   };
 
-  const getData = () => {
-    authorisation.signIn(user).then((data) => {
-      try {
-        getToken(data.user.token);
-      } catch {
-        getErrors(data.errors);
-      }
-    });
-  };
-
-  const getToken = (token) => {
+  const setToken = (token) => {
     localStorage.setItem("token", token);
     setRedirect(true);
     changeUser({});
   };
 
-  const getErrors = (errors) => {
-    const arr = [];
-    for (let key in errors) {
-      arr.push(`${key} ${errors[key]}`);
-    }
-    setErrors(arr);
+  const getData = () => {
+    const user = {
+      user: { email, password },
+    };
+    authorisation.signIn(user).then((data) => {
+      try {
+        setToken(data.user.token);
+      } catch {
+        setErrors(data.errors);
+      }
+    });
   };
 
   if (redirect) {
@@ -58,14 +49,12 @@ const AuthorizationForm = ({ changeUser }) => {
   }
 
   return (
-    <React.Fragment>
-      <Form
-        setPasswords={setPasswords}
-        setEmails={setEmails}
-        getData={getData}
-        errors={errors}
-      />
-    </React.Fragment>
+    <Form
+      setPasswords={setPasswords}
+      setEmails={setEmails}
+      getData={getData}
+      errors={errors}
+    />
   );
 };
 export default AuthorizationForm;

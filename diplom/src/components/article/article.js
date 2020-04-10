@@ -1,15 +1,15 @@
 import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 
-import GetUser from "../../services/getUser";
+import ServicesWithToken from "../../services/servicesWithToken";
 
-import Like from "../article-list-like";
-import Tag from "../tag";
+import Like from "../like";
+import TagList from "../tag-list";
 
 import "./article.css";
 
 const Article = ({ article, loggedIn }) => {
-  const getUser = useMemo(() => new GetUser(), []);
+  const servicesWithToken = useMemo(() => new ServicesWithToken(), []);
 
   const [favoritesCount, setFavoritesCount] = useState(article.favoritesCount);
   const [favorited, setFavorited] = useState(article.favorited);
@@ -18,21 +18,34 @@ const Article = ({ article, loggedIn }) => {
     if (favorited) {
       deleteLike(slug);
     } else {
-      getLike(slug);
+      setLike(slug);
     }
   };
 
-  const getLike = (slug) => {
-    getUser.getLike(slug);
+  const setLike = (slug) => {
+    servicesWithToken.getLike(slug);
     setFavorited(true);
     setFavoritesCount(favoritesCount + 1);
   };
 
   const deleteLike = (slug) => {
-    getUser.deleteLike(slug);
+    servicesWithToken.deleteLike(slug);
     setFavorited(false);
     setFavoritesCount(favoritesCount - 1);
   };
+
+  function formatDate(date) {
+    var dd = date.getDate();
+    if (dd < 10) dd = "0" + dd;
+
+    var mm = date.getMonth() + 1;
+    if (mm < 10) mm = "0" + mm;
+
+    var yy = date.getFullYear() % 100;
+    if (yy < 10) yy = "0" + yy;
+
+    return dd + "." + mm + "." + yy;
+  }
 
   return (
     <li className="item">
@@ -47,7 +60,9 @@ const Article = ({ article, loggedIn }) => {
             <Link className="name" to={`/profile/${article.author.username}`}>
               {article.author.username}
             </Link>
-            <div className="date">{article.updatedAt}</div>
+            <div className="date">
+              {formatDate(new Date(article.updatedAt))}
+            </div>
           </div>
         </div>
         <Like
@@ -66,7 +81,7 @@ const Article = ({ article, loggedIn }) => {
         <Link className="readMore" to={`/article/${article.slug}`}>
           Read more...
         </Link>
-        <Tag tags={article.tagList} />
+        <TagList tags={article.tagList} />
       </div>
     </li>
   );

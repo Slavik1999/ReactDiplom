@@ -1,34 +1,47 @@
 import React, { useMemo, useEffect, useState } from "react";
-import WithToken from "../../services/withToken";
-import Services from "../../services/services";
 import { withRouter } from "react-router-dom";
-
-import "./new-article.css";
 import { Redirect } from "react-router";
 
+import ErrorList from "../error-list";
+
+import WithTokenAndBody from "../../services/withTokenAndBody";
+import ServicesWithToken from "../../services/servicesWithToken";
+
+import "./new-article.css";
+
 const NewArticle = ({ match }) => {
-  const withToken = useMemo(() => new WithToken(), []);
-  const services = useMemo(() => new Services(), []);
+  const withTokenAndBody = useMemo(() => new WithTokenAndBody(), []);
+  const servicesWithToken = useMemo(() => new ServicesWithToken(), []);
+
   const [slug, setSlug] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [body, setBody] = useState("");
-  const [tagList, setTagList] = useState([]);
-  const [redirect, setRedirect] = useState("");
+  const [tagList, setTagList] = useState("");
+  const [redirect, setRedirect] = useState(false);
+
+  const [errors, setErrors] = useState("");
+
   const article = {
     article: {},
   };
   useEffect(() => {
     if (match.params.slug) {
-      services.getArticle(match.params.slug).then((data) => {
+      servicesWithToken.getArticle(match.params.slug).then((data) => {
         setSlug(data.article.slug);
         setTitle(data.article.title);
         setDescription(data.article.description);
         setBody(data.article.body);
         setTagList(data.article.tagList);
       });
+    } else {
+      setSlug("");
+      setTitle("");
+      setDescription("");
+      setBody("");
+      setTagList([]);
     }
-  }, [services, match]);
+  }, [servicesWithToken, match]);
   useEffect(() => {
     article.article = {
       tagList,
@@ -39,18 +52,32 @@ const NewArticle = ({ match }) => {
   }, [title, description, body, tagList, article]);
   const getArticle = () => {
     if (match.params.slug) {
-      withToken.editArticle(article, slug).then((data) => {
-        setRedirect(<Redirect to={`/article/${data.article.slug}`} />);
+      withTokenAndBody.editArticle(article, slug).then((data) => {
+        try {
+          setRedirect(true);
+        } catch {
+          setErrors(data.errors);
+        }
       });
     } else {
-      withToken.postArticle(article).then((data) => {
-        setRedirect(<Redirect to={`/article/${data.article.slug}`} />);
+      withTokenAndBody.postArticle(article).then((data) => {
+        try {
+          setSlug(data.article.slug);
+          setRedirect(true);
+        } catch {
+          setErrors(data.errors);
+        }
       });
     }
   };
+
+  if (redirect) {
+    return <Redirect to={`/article/${slug}`} />;
+  }
+
   return (
     <div className="form container">
-      {redirect}
+      <ErrorList errors={errors} />
       <form
         className="form"
         onSubmit={(e) => {

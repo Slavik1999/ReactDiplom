@@ -1,10 +1,3 @@
-.tag:hover {
-  text-decoration: none;
-}
-.container.article {
-  margin-right: 20px;
-  padding: 0px;
-}
 .ulBody {
   margin-top: 10px;
   padding: 0px;
@@ -12,80 +5,6 @@
 }
 .ulBody li {
   padding-left: 0px;
-}
-.item {
-  border-top: 1px solid rgb(250, 219, 219);
-  padding: 10px 0px 20px 0px;
-}
-.userInfo {
-  display: flex;
-}
-.fa.fa-smile-o {
-  font-size: 40px;
-  margin-right: 5px;
-}
-.date {
-  color: rgb(161, 148, 148);
-  font-size: 13px;
-  font-weight: 200;
-  margin-top: -8px;
-}
-
-.fa.fa-heart {
-  margin-right: 3px;
-}
-.ulBody .body {
-  margin-top: 8px;
-  display: flex;
-  flex-direction: column;
-}
-.bodyTitle {
-  color: black;
-  font-size: 25px;
-  font-weight: 600;
-}
-
-.bodyInfo {
-  color: rgb(161, 148, 148);
-  font-size: 15px;
-  font-weight: 200;
-}
-.body:hover {
-  text-decoration: none;
-}
-.ulBody .footer {
-  margin-top: 10px;
-}
-.readMore {
-  color: rgb(161, 148, 148);
-  font-size: 12px;
-  font-weight: 200;
-}
-.readMore:hover {
-  text-decoration: none;
-  color: black;
-}
-.header {
-  padding: 0px;
-}
-.avatarSpan {
-  margin-right: 5px;
-}
-.userInfo .avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 100px;
-}
-.footer {
-  display: flex;
-  justify-content: space-between;
-}
-.footer .tag {
-  font-size: 11px;
-  padding: 3px;
-  background-color: white;
-  color: rgb(199, 180, 180);
-  border: 1px solid rgb(199, 180, 180);
 }
 .buttons {
   display: flex;
@@ -106,10 +25,4 @@
 .button:hover {
   cursor: pointer;
   background-color: rgb(199, 180, 180);
-}
-.name {
-  color: #16b85f;
-}
-.name:hover {
-  color: #16b85f;
 }

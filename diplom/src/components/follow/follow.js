@@ -3,7 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 
 import "./follow.css";
 
-const ArticlePageFollow = ({ loggedIn, GetFollowing, following, username }) => {
+const Follow = ({ loggedIn, GetFollowing, following, username }) => {
   let className = "articleFollow";
   let followBody = `+ Follow ${username}`;
 
@@ -31,4 +31,4 @@ const ArticlePageFollow = ({ loggedIn, GetFollowing, following, username }) => {
   }
 };
 
-export default withRouter(ArticlePageFollow);
+export default withRouter(Follow);

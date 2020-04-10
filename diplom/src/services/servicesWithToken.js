@@ -1,13 +1,13 @@
-export default class GetUser {
+export default class ServicesWithToken {
   _apiBase = "https://conduit.productionready.io/api";
   getResource = async (url, method) => {
     const headers = {
       "Content-Type": "application/json",
-      authorization: `Token ${localStorage.getItem("token")}`
+      authorization: `Token ${localStorage.getItem("token")}`,
     };
     const res = await fetch(`${this._apiBase}${url}`, {
       method: method,
-      headers: headers
+      headers: headers,
     });
 
     if (!res.ok) {
@@ -16,23 +16,19 @@ export default class GetUser {
     return await res.json();
   };
 
-  getUserLoginInfo = async () => {
-    const article = await this.getResource(`/user`, "GET");
-    return article;
-  };
-  getLike = async slug => {
+  getLike = async (slug) => {
     const user = await this.getResource(`/articles/${slug}/favorite`, "POST");
     return user;
   };
-  deleteLike = async slug => {
+  deleteLike = async (slug) => {
     const user = await this.getResource(`/articles/${slug}/favorite`, "DELETE");
     return user;
   };
-  getFollowing = async username => {
+  getFollowing = async (username) => {
     const user = await this.getResource(`/profiles/${username}/follow`, "POST");
     return user;
   };
-  deleteFollowing = async username => {
+  deleteFollowing = async (username) => {
     const user = await this.getResource(
       `/profiles/${username}/follow`,
       "DELETE"
@@ -46,7 +42,7 @@ export default class GetUser {
     );
     return articles;
   };
-  getFeedArticles = async page => {
+  getFeedArticles = async (page) => {
     const articles = await this.getResource(
       `/articles/feed?limit=10&amp;offset=${page * 10}/`,
       "GET"
@@ -67,14 +63,17 @@ export default class GetUser {
     );
     return article;
   };
-  getArticle = async slug => {
+  getArticle = async (slug) => {
     const article = await this.getResource(`/articles/${slug}`, "GET");
     return article;
   };
-  getPerson = async username => {
+  getPerson = async (username) => {
     const article = await this.getResource(`/profiles/${username}`, "GET");
     return article;
   };
-}
 
-// /api/articles/feed?limit=10&offset=0
+  getUserLoginInfo = async () => {
+    const article = await this.getResource(`/user`, "GET");
+    return article;
+  };
+}

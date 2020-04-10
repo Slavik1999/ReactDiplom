@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+
+import ErrorList from "../error-list";
 
 import "./form.css";
 
 const Form = ({ setNames, setEmails, setPasswords, getData, errors }) => {
-  const [error, setError] = useState([]);
-
-  useEffect(() => {
-    if (errors) {
-      setError(errors);
-    }
-  }, [errors]);
-
-  let header = "";
-  let inputName = "";
-  let link = "";
+  let header = "Sign in";
+  let inputName;
+  let askingLink = (
+    <Link className="linkForm" to="/register">
+      Need an account?
+    </Link>
+  );
 
   if (setNames) {
     header = "Sign up";
@@ -28,32 +26,20 @@ const Form = ({ setNames, setEmails, setPasswords, getData, errors }) => {
         />
       </div>
     );
-    link = (
+    askingLink = (
       <Link className="linkForm" to="/login">
         Have an account?
       </Link>
     );
-  } else {
-    header = "Sign in";
-    link = (
-      <Link className="linkForm" to="/register">
-        Need an account?
-      </Link>
-    );
   }
-
-  const errorList = error.map(error => {
-    return <li key={error}>{error}</li>;
-  });
-
   return (
     <div className="form container">
       <h1>{header}</h1>
-      {link}
-      <ul>{errorList}</ul>
+      {askingLink}
+      <ErrorList errors={errors} />
       <form
         className="form"
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault();
           getData();
         }}

@@ -1,15 +1,15 @@
-.container.body {
+.body {
   display: flex;
   justify-content: space-between;
   margin-top: 45px;
 }
-.container.body .linkBody {
+.body .linkBody {
   margin-right: 5px;
   padding: 10px;
   border-bottom: 2px solid #08d319;
   color: rgb(161, 148, 148);
 }
-.container.body .linkBody:hover {
+.body .linkBody:hover {
   text-decoration: none;
   color: black;
 }

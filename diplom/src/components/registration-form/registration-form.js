@@ -8,6 +8,8 @@ import Authorisation from "../../services/authorisation";
 import "./registration-form.css";
 
 const RegistrationFrom = ({ changeUser }) => {
+  const authorisation = useMemo(() => new Authorisation(), []);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -15,12 +17,6 @@ const RegistrationFrom = ({ changeUser }) => {
   const [errors, setErrors] = useState([]);
 
   const [redirect, setRedirect] = useState(false);
-
-  const authorisation = useMemo(() => new Authorisation(), []);
-
-  const user = {
-    user: { email, password, username },
-  };
 
   const setNames = (e) => {
     setUsername(e.target.value);
@@ -33,27 +29,22 @@ const RegistrationFrom = ({ changeUser }) => {
   };
 
   const getData = () => {
+    const user = {
+      user: { email, password, username },
+    };
     authorisation.registration(user).then((data) => {
       try {
-        getToken(data.user.token);
+        setToken(data.user.token);
       } catch {
-        getErrors(data.errors);
+        setErrors(data.errors);
       }
     });
   };
 
-  const getToken = (token) => {
+  const setToken = (token) => {
     localStorage.setItem("token", token);
     setRedirect(true);
     changeUser({});
-  };
-
-  const getErrors = (errors) => {
-    const arr = [];
-    for (let key in errors) {
-      arr.push(`${key} ${errors[key]}`);
-    }
-    setErrors(arr);
   };
 
   if (redirect) {

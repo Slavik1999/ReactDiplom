@@ -1,10 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Redirect } from "react-router-dom";
-import WithToken from "../../services/withToken";
+import WithTokenAndBody from "../../services/withTokenAndBody";
 
 import "./user-settings.css";
+import ErrorList from "../error-list";
 
-const NewArticle = ({ user, changeUser }) => {
+const UserSettings = ({ user, changeUser }) => {
+  const withTokenAndBody = useMemo(() => new WithTokenAndBody(), []);
+
   const [id, setId] = useState("");
   const [email, setUserEmail] = useState("");
   const [createdAt, setCreatedAt] = useState("");
@@ -16,10 +19,8 @@ const NewArticle = ({ user, changeUser }) => {
 
   const [errors, setErrors] = useState([]);
 
-  const withToken = useMemo(() => new WithToken(), []);
-
   const userObj = {
-    user: {}
+    user: {},
   };
 
   useEffect(() => {
@@ -36,27 +37,29 @@ const NewArticle = ({ user, changeUser }) => {
       id,
       email,
       createdAt,
-      updatedAt: Date.now(),
+      updatedAt: new Date().toISOString(),
       username,
       bio,
       image,
       token: localStorage.getItem("token"),
-      password
+      password,
     };
   }, [id, email, createdAt, username, bio, image, password, userObj]);
 
   const editProfile = () => {
-    withToken.editPerson(userObj).then(data => {
+    withTokenAndBody.editPerson(userObj).then((data) => {
       if (data.errors) {
-        const arr = [];
-        for (let val in data.errors) {
-          arr.push(`${val} ${data.errors[val]}`);
-        }
-        setErrors(arr);
+        setErrors(data.errors);
       } else {
         changeUser({});
         setRedirect(true);
       }
+      // try {
+      //   changeUser({});
+      //   setRedirect(true);
+      // } catch {
+      //   setErrors(data.errors);
+      // }
     });
   };
 
@@ -67,20 +70,20 @@ const NewArticle = ({ user, changeUser }) => {
   };
 
   if (redirect) {
-    return <Redirect to="/" />;
+    let linkPath = "/";
+    if (localStorage.getItem("token")) {
+      linkPath += `profile/${username}`;
+    }
+    return <Redirect to={linkPath} />;
   }
-
-  const erroring = errors.map(error => {
-    return <li key={error}>{error}</li>;
-  });
 
   return (
     <div className="form container">
       <h2>Your Settings</h2>
-      <ul>{erroring}</ul>
+      <ErrorList errors={errors} />
       <form
         className="form"
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault();
           editProfile();
         }}
@@ -90,7 +93,7 @@ const NewArticle = ({ user, changeUser }) => {
             type="text"
             className="form-control"
             placeholder="URL of profile picture"
-            onChange={e => {
+            onChange={(e) => {
               setUserImage(e.target.value);
             }}
             value={image}
@@ -102,7 +105,7 @@ const NewArticle = ({ user, changeUser }) => {
             className="form-control"
             placeholder="Username"
             value={username}
-            onChange={e => {
+            onChange={(e) => {
               setUsername(e.target.value);
             }}
           />
@@ -113,7 +116,7 @@ const NewArticle = ({ user, changeUser }) => {
             className="form-control"
             placeholder="Short bio about you"
             value={bio}
-            onChange={e => {
+            onChange={(e) => {
               setUserBio(e.target.value);
             }}
           />
@@ -124,7 +127,7 @@ const NewArticle = ({ user, changeUser }) => {
             className="form-control"
             placeholder="Email"
             value={email}
-            onChange={e => {
+            onChange={(e) => {
               setUserEmail(e.target.value);
             }}
           />
@@ -134,7 +137,7 @@ const NewArticle = ({ user, changeUser }) => {
             type="password"
             className="form-control"
             placeholder="New password"
-            onChange={e => {
+            onChange={(e) => {
               setUserPassword(e.target.value);
             }}
           />
@@ -149,4 +152,4 @@ const NewArticle = ({ user, changeUser }) => {
     </div>
   );
 };
-export default NewArticle;
+export default UserSettings;

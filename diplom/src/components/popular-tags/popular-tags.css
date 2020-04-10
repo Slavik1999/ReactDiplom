@@ -1,0 +1,12 @@
+.containerTags {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 30%;
+  background-color: rgb(255, 234, 234);
+  border-radius: 5px;
+  padding: 10px;
+}
+.headerTag {
+  padding-top: 3px;
+}

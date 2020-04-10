@@ -1,164 +1,137 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Link, withRouter } from "react-router-dom";
 import ArticleList from "../article-list";
-import Services from "../../services/services";
-import GetUser from "../../services/getUser";
 import Follow from "../follow";
+
+import Services from "../../services/services";
+import ServicesWithToken from "../../services/servicesWithToken";
 
 import "./person-page.css";
 
 const PersonPage = ({ loggedIn, match, username }) => {
+  const services = useMemo(() => new Services(), []);
+  const servicesWithToken = useMemo(() => new ServicesWithToken(), []);
+
   const [user, setUser] = useState("");
   const [userArticles, setUserArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [followLink, setFollowLink] = useState("");
+  const [following, setFollowing] = useState(null);
+
   const [articlesPage, setArticlesPage] = useState(0);
 
-  const [myPost, setMyPost] = useState(true);
   const [favoritedPost, setFavoritedPost] = useState(false);
 
+  const [followLink, setFollowLink] = useState("");
   const [myPostLink, setMyPostLink] = useState(true);
   const [favoritedPostLink, setFavoritedPostLink] = useState(false);
 
-  const [following, setFollowing] = useState("");
-
-  const api = useMemo(() => new Services(), []);
-  const getUser = useMemo(() => new GetUser(), []);
-
   useEffect(() => {
+    let unmounted = false;
+    let service;
     if (loggedIn) {
-      if (myPost) {
-        setLoading(true);
-        getUser
-          .getPersonArticles(match.params.username, articlesPage)
-          .then(data => {
+      service = servicesWithToken;
+    } else {
+      service = services;
+    }
+    if (favoritedPost) {
+      setLoading(true);
+      service
+        .getFavoritePersonArticles(match.params.username, articlesPage)
+        .then((data) => {
+          if (!unmounted) {
             setUserArticles(data);
             setLoading(false);
-          });
-        getUser.getPerson(match.params.username).then(data => {
+          }
+        });
+    } else {
+      setLoading(true);
+      service
+        .getPersonArticles(match.params.username, articlesPage)
+        .then((data) => {
+          if (!unmounted) {
+            setUserArticles(data);
+            setLoading(false);
+          }
+        });
+      service.getPerson(match.params.username).then((data) => {
+        if (!unmounted) {
           setUser(data.profile);
           setFollowing(data.profile.following);
-        });
-      } else if (favoritedPost) {
-        setLoading(true);
-        getUser
-          .getFavoritePersonArticles(match.params.username, articlesPage)
-          .then(data => {
-            setUserArticles(data);
-            setLoading(false);
-          });
-      }
-    } else {
-      if (myPost) {
-        setLoading(true);
-        api
-          .getPersonArticles(match.params.username, articlesPage)
-          .then(data => {
-            setUserArticles(data);
-            setLoading(false);
-          });
-        api
-          .getPerson(match.params.username)
-          .then(data => setUser(data.profile));
-      } else if (favoritedPost) {
-        setLoading(true);
-        api
-          .getFavoritePersonArticles(match.params.username, articlesPage)
-          .then(data => {
-            setUserArticles(data);
-            setLoading(false);
-          });
-      }
+        }
+      });
     }
-  }, [api, match, getUser, loggedIn, articlesPage, myPost, favoritedPost]);
+    return () => {
+      unmounted = true;
+    };
+  }, [
+    services,
+    match,
+    servicesWithToken,
+    loggedIn,
+    articlesPage,
+    favoritedPost,
+  ]);
 
   useEffect(() => {
-    const GetFollowing = (username, following) => {
+    const getFollowing = (username, following) => {
       if (!following) {
-        getUser.getFollowing(username);
+        servicesWithToken.getFollowing(username);
         setFollowing(true);
       } else {
-        getUser.deleteFollowing(username);
+        servicesWithToken.deleteFollowing(username);
         setFollowing(false);
       }
     };
-    if (username) {
-      if (user.username === username) {
-        setFollowLink(
-          <Link className="editArticle" to={`/settings`}>
-            <i className="fa fa-cog" aria-hidden="true"></i> Edit Profile
-            Settings
-          </Link>
-        );
-      } else {
-        if (user) {
-          setFollowLink(
-            <Follow
-              loggedIn={loggedIn}
-              username={user.username}
-              GetFollowing={GetFollowing}
-              following={following}
-            />
-          );
-        }
-      }
+    if (user.username === username) {
+      setFollowLink(
+        <Link className="editArticle" to={`/settings`}>
+          <i className="fa fa-cog" aria-hidden="true"></i> Edit Profile Settings
+        </Link>
+      );
     } else {
-      if (user) {
-        setFollowLink(
-          <Follow
-            loggedIn={loggedIn}
-            username={user.username}
-            GetFollowing={GetFollowing}
-            following={following}
-          />
-        );
-      }
+      setFollowLink(
+        <Follow
+          loggedIn={loggedIn}
+          username={user.username}
+          GetFollowing={getFollowing}
+          following={following}
+        />
+      );
     }
-  }, [username, loggedIn, user, following, getUser]);
+  }, [username, loggedIn, user, following, servicesWithToken]);
 
-  useEffect(() => {
-    if (myPost) {
-      setMyPostLink(
-        <span className="activeLink" onClick={() => getUserArticles()}>
-          My Posts
-        </span>
-      );
-    } else {
-      setMyPostLink(
-        <span className="link" onClick={() => getUserArticles()}>
-          My Posts
-        </span>
-      );
-    }
-    if (favoritedPost) {
-      setFavoritedPostLink(
-        <span className="activeLink" onClick={() => getFavoriteUserArticles()}>
-          Favorited Posts
-        </span>
-      );
-    } else {
-      setFavoritedPostLink(
-        <span className="link" onClick={() => getFavoriteUserArticles()}>
-          Favorited Posts
-        </span>
-      );
-    }
-  }, [myPost, favoritedPost]);
-
-  const getArticlePage = page => {
+  const getArticlePage = (page) => {
     setArticlesPage(page);
   };
 
-  const getUserArticles = () => {
-    setFavoritedPost(false);
-    setMyPost(true);
+  const getArticles = (choose) => {
+    setFavoritedPost(choose);
     setArticlesPage(0);
   };
-  const getFavoriteUserArticles = () => {
-    setMyPost(false);
-    setFavoritedPost(true);
-    setArticlesPage(0);
-  };
+
+  useEffect(() => {
+    let favoritedPostClassName = "link";
+    let myPostClassName = "link";
+
+    if (favoritedPost) {
+      favoritedPostClassName = "activeLink";
+    } else {
+      myPostClassName = "activeLink";
+    }
+    setFavoritedPostLink(
+      <span
+        className={favoritedPostClassName}
+        onClick={() => getArticles(true)}
+      >
+        Favorited Posts
+      </span>
+    );
+    setMyPostLink(
+      <span className={myPostClassName} onClick={() => getArticles(false)}>
+        My Posts
+      </span>
+    );
+  }, [favoritedPost]);
 
   const Loading = loading ? <h3>Loading articles...</h3> : null;
   const UserArticles = !loading ? (
@@ -175,23 +148,28 @@ const PersonPage = ({ loggedIn, match, username }) => {
     ) : null;
   return (
     <React.Fragment>
-      <div className="profileHeader">
-        <div className="profileAvatar">
-          <img className="avatar" src={user.image} alt="" />
-          <br></br>
-          <span className="profileName">{user.username}</span>
-          <br></br>
-          <span className="bio">{user.bio}</span>
-        </div>
-        <div className="container buttonFollow">{followLink}</div>
-      </div>
-      <div className="container linkProfiles">
-        {myPostLink}
-        {favoritedPostLink}
-        {Loading}
-        {noArticles}
-        {UserArticles}
-      </div>
+      {user && (
+        <React.Fragment>
+          <div className="profileHeader">
+            <div className="profileAvatar">
+              <img className="avatar" src={user.image} alt="" />
+              <br></br>
+              <span className="profileName">{user.username}</span>
+              <br></br>
+              <span className="bio">{user.bio}</span>
+            </div>
+            <div className="container buttonFollow">{followLink}</div>
+          </div>
+
+          <div className="container linkProfiles">
+            {myPostLink}
+            {favoritedPostLink}
+            {Loading}
+            {noArticles}
+            {UserArticles}
+          </div>
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 };
