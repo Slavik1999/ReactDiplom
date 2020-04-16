@@ -96,7 +96,7 @@ const UserSettings = ({ user, changeUser }) => {
             onChange={(e) => {
               setUserImage(e.target.value);
             }}
-            value={image}
+            value={image || ""}
           />
         </div>
         <div className="form-group">
@@ -115,7 +115,7 @@ const UserSettings = ({ user, changeUser }) => {
             type="text"
             className="form-control"
             placeholder="Short bio about you"
-            value={bio}
+            value={bio || ""}
             onChange={(e) => {
               setUserBio(e.target.value);
             }}
